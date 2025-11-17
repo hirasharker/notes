@@ -7,10 +7,27 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+            
+            <x-alert-success>{{ session('success') }}</x-alert-success>
+
+            @if($note->notebook)
+                <span class="px-2 py-1 border border-indigo-400 bg-indigo-100 rounded font-semibold text-sm">
+                    {{ $note->notebook->name }}
+                </span>
+            @endif
 
             <div class="flex gap-6">
                 <p class="opacity-70"><strong>Created:</strong> {{ $note->created_at->diffForHumans() }}</p>
                 <p class="opacity-70"><strong>Last Changed:</strong> {{ $note->updated_at->diffForHumans() }}</p>
+
+                <x-link-button href="{{ route('notes.edit', $note) }}" class="ml-auto">Edit Note</x-link-button>
+                <form action="{{ route('notes.destroy', $note) }}" method="post">
+                    @method('delete')
+                    @csrf
+                    <x-primary-button class="bg-red-500 hover:bg-red-600 focus:bg:-red-600"
+                        onclick="return confirm('Move to trash?')"
+                    >Move to Trash</x-primary-button>
+                </form>
             </div>
 
             <div class="bg-white p-6 overflow-hidden shadow-sm sm:rounded-lg">
